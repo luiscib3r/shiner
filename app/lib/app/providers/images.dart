@@ -50,7 +50,7 @@ final imagesPaginationPod =
 //============================================================================
 // Load images
 //============================================================================
-final imagesPod = FutureProvider((ref) async {
+final imagesPod = FutureProvider.autoDispose((ref) async {
   final repository = ref.watch(imagesRepositoryPod);
   final pagination = ref.watch(imagesPaginationPod);
 
