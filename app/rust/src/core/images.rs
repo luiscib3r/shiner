@@ -12,7 +12,7 @@ pub struct ImageJob {
     pub id: i64,
     pub prompt: String,
     pub status: JobStatus,
-    pub image_path: String,
+    pub image_path: Option<String>,
 }
 
 pub struct ImageJobRepository {
@@ -154,6 +154,26 @@ impl ImageJobRepository {
             .await?;
 
         stmt.execute(libsql::named_params! {":id": id}).await?;
+
+        Ok(())
+    }
+
+    pub async fn cleanup(&self) -> Result<()> {
+        let mut stmt = self
+            .db
+            .prepare("DELETE FROM image_jobs WHERE status = :status")
+            .await?;
+
+        stmt.execute(libsql::named_params! {":status": JobStatus::Failed})
+            .await?;
+
+        Ok(())
+    }
+
+    pub async fn drop_all(&self) -> Result<()> {
+        let mut stmt = self.db.prepare("DROP TABLE IF EXISTS image_jobs").await?;
+
+        stmt.execute(()).await?;
 
         Ok(())
     }

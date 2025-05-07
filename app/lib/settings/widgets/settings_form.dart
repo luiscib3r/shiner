@@ -14,7 +14,6 @@ class SettingsForm extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final apiKeyController = useTextEditingController();
-    final saveSettings = ref.read(saveSettingsPod.notifier);
     final state = ref.watch(saveSettingsPod);
 
     useEffect(() {
@@ -44,6 +43,9 @@ class SettingsForm extends HookConsumerWidget {
                         !state.isLoading
                             ? () {
                               context.unfocus();
+                              final saveSettings = ref.read(
+                                saveSettingsPod.notifier,
+                              );
                               saveSettings(
                                 Settings(openaiApiKey: apiKeyController.text),
                               );

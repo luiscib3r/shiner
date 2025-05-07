@@ -1,5 +1,7 @@
+import 'package:app/generation/generation.dart';
 import 'package:app/home/home.dart';
 import 'package:app/settings/settings.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends GoRoute {
@@ -7,8 +9,9 @@ class HomePage extends GoRoute {
     : super(
         path: fullPath,
         builder: (context, state) => const HomeView(),
-        routes: [SettingsPage()],
+        routes: [SettingsPage(), GenerationPage()],
       );
 
   static const fullPath = '/';
+  static void open(BuildContext context) => context.go(fullPath);
 }

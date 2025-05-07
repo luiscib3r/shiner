@@ -13,7 +13,11 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 abstract class ImageJobRepository implements RustOpaqueInterface {
   factory ImageJobRepository({required ArcConnection db}) =>
       RustLib.instance.api.crateCoreImagesImageJobRepositoryNew(db: db);
+  Future<void> cleanup();
+
   Future<PlatformInt64> createJob({required String prompt});
+
+  Future<void> dropAll();
 
   Future<ImageJob?> findById({required PlatformInt64 id});
 
@@ -44,12 +48,12 @@ class ImageJob {
     required this.id,
     required this.prompt,
     required this.status,
-    required this.imagePath,
+    this.imagePath,
   });
   final PlatformInt64 id;
   final String prompt;
   final JobStatus status;
-  final String imagePath;
+  final String? imagePath;
 
   @override
   int get hashCode =>

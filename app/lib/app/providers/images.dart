@@ -56,3 +56,30 @@ final imagesPod = FutureProvider.autoDispose((ref) async {
 
   return repository.load(pagination: pagination);
 });
+
+//============================================================================
+// Generate image
+//============================================================================
+final _generateImagePod = FutureProvider.family.autoDispose<int, String>((
+  ref,
+  prompt,
+) async {
+  final repository = ref.watch(imagesRepositoryPod);
+
+  final jobId = await repository.createJob(prompt: prompt);
+  ref.invalidate(imagesPod);
+
+  return jobId;
+});
+
+class _GenerateImageNotifier extends AutoDisposeNotifier<AsyncValue<int?>> {
+  @override
+  AsyncValue<int?> build() => const AsyncValue.data(null);
+
+  void call(String prompt) => state = ref.watch(_generateImagePod(prompt));
+}
+
+final generateImagePod =
+    NotifierProvider.autoDispose<_GenerateImageNotifier, AsyncValue<int?>>(
+      _GenerateImageNotifier.new,
+    );
