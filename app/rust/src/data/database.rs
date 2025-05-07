@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use anyhow::Result;
-use libsql::{Builder, Connection};
+pub use libsql::{Builder, Connection};
 
 pub struct Database {}
 
