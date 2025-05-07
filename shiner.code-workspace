@@ -1,0 +1,24 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "app"
+    },
+    {
+      "name": "app_rust",
+      "path": "app/rust"
+    },
+    {
+      "path": "api"
+    },
+    {
+      "path": "cli"
+    },
+    {
+      "path": "shiner"
+    }
+  ],
+  "settings": {}
+}
