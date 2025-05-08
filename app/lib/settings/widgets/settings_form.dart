@@ -13,6 +13,7 @@ class SettingsForm extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = useMemoized(GlobalKey<FormState>.new);
     final apiKeyController = useTextEditingController();
     final state = ref.watch(saveSettingsPod);
 
@@ -24,16 +25,23 @@ class SettingsForm extends HookConsumerWidget {
 
     return SafeArea(
       child: Form(
+        key: formKey,
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             children: [
-              TextField(
+              TextFormField(
                 enabled: !state.isLoading,
                 controller: apiKeyController,
                 minLines: 1,
                 maxLines: 3,
                 decoration: const InputDecoration(labelText: 'OpenAI API Key'),
+                validator: (apiKey) {
+                  if (apiKey == null || apiKey.isEmpty) {
+                    return 'Please enter an OpenAI API Key';
+                  }
+                  return null;
+                },
               ),
               const Spacer(),
               Row(
@@ -44,12 +52,16 @@ class SettingsForm extends HookConsumerWidget {
                           !state.isLoading
                               ? () {
                                 context.unfocus();
-                                final saveSettings = ref.read(
-                                  saveSettingsPod.notifier,
-                                );
-                                saveSettings(
-                                  Settings(openaiApiKey: apiKeyController.text),
-                                );
+                                if (formKey.currentState?.validate() ?? false) {
+                                  final saveSettings = ref.read(
+                                    saveSettingsPod.notifier,
+                                  );
+                                  saveSettings(
+                                    Settings(
+                                      openaiApiKey: apiKeyController.text,
+                                    ),
+                                  );
+                                }
                               }
                               : null,
                       child: const Text('Save'),
