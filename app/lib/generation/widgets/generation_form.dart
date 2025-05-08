@@ -27,47 +27,51 @@ class GenerationForm extends HookConsumerWidget {
       return null;
     });
 
-    return Form(
-      key: formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            TextFormField(
-              enabled: !state.isLoading,
-              controller: promptController,
-              keyboardType: TextInputType.multiline,
-              decoration: const InputDecoration(labelText: 'Prompt'),
-              validator: (prompt) {
-                if (prompt == null || prompt.isEmpty) {
-                  return 'Please enter a prompt';
-                }
-                return null;
-              },
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed:
-                        !state.isLoading
-                            ? () {
-                              context.unfocus();
-                              if (formKey.currentState?.validate() ?? false) {
-                                final generateImage = ref.read(
-                                  generateImagePod.notifier,
-                                );
-                                generateImage(promptController.text);
+    return SafeArea(
+      child: Form(
+        key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              TextFormField(
+                enabled: !state.isLoading,
+                controller: promptController,
+                keyboardType: TextInputType.multiline,
+                textInputAction: TextInputAction.newline,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: const InputDecoration(labelText: 'Prompt'),
+                validator: (prompt) {
+                  if (prompt == null || prompt.isEmpty) {
+                    return 'Please enter a prompt';
+                  }
+                  return null;
+                },
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed:
+                          !state.isLoading
+                              ? () {
+                                context.unfocus();
+                                if (formKey.currentState?.validate() ?? false) {
+                                  final generateImage = ref.read(
+                                    generateImagePod.notifier,
+                                  );
+                                  generateImage(promptController.text);
+                                }
                               }
-                            }
-                            : null,
-                    child: const Text('Generate'),
+                              : null,
+                      child: const Text('Generate'),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

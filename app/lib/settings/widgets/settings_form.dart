@@ -22,41 +22,43 @@ class SettingsForm extends HookConsumerWidget {
       return null;
     }, [settings]);
 
-    return Form(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            TextField(
-              enabled: !state.isLoading,
-              controller: apiKeyController,
-              minLines: 1,
-              maxLines: 3,
-              decoration: const InputDecoration(labelText: 'OpenAI API Key'),
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed:
-                        !state.isLoading
-                            ? () {
-                              context.unfocus();
-                              final saveSettings = ref.read(
-                                saveSettingsPod.notifier,
-                              );
-                              saveSettings(
-                                Settings(openaiApiKey: apiKeyController.text),
-                              );
-                            }
-                            : null,
-                    child: const Text('Save'),
+    return SafeArea(
+      child: Form(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              TextField(
+                enabled: !state.isLoading,
+                controller: apiKeyController,
+                minLines: 1,
+                maxLines: 3,
+                decoration: const InputDecoration(labelText: 'OpenAI API Key'),
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed:
+                          !state.isLoading
+                              ? () {
+                                context.unfocus();
+                                final saveSettings = ref.read(
+                                  saveSettingsPod.notifier,
+                                );
+                                saveSettings(
+                                  Settings(openaiApiKey: apiKeyController.text),
+                                );
+                              }
+                              : null,
+                      child: const Text('Save'),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
