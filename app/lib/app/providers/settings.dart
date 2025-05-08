@@ -1,5 +1,5 @@
 import 'package:app/app/internal/core/settings.dart';
-import 'package:app/app/internal/data/database.dart';
+import 'package:app/app/internal/lib.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 //============================================================================

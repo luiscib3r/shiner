@@ -11,6 +11,7 @@ class ImagesGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.count(
       crossAxisCount: 2,
+      childAspectRatio: 9 / 16,
       children: images
           .map((image) => ImageCard(image: image))
           .toList(growable: false),

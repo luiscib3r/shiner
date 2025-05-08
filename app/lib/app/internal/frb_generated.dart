@@ -3,6 +3,7 @@
 
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
+import 'ai.dart';
 import 'core/images.dart';
 import 'core/job.dart';
 import 'core/pagination.dart';
@@ -13,6 +14,7 @@ import 'data/database.dart';
 import 'frb_generated.dart';
 import 'frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
+import 'lib.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 /// Main entrypoint of the Rust API
@@ -68,7 +70,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.9.0';
 
   @override
-  int get rustContentHash => -623734412;
+  int get rustContentHash => 724508636;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -79,6 +81,13 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
+  Future<ImageGenerator> crateAiImageGeneratorNew({required String apiKey});
+
+  Future<Uint8List> crateAiImageGeneratorRun({
+    required ImageGenerator that,
+    required String prompt,
+  });
+
   Future<void> crateCoreImagesImageJobRepositoryCleanup({
     required ImageJobRepository that,
   });
@@ -107,18 +116,30 @@ abstract class RustLibApi extends BaseApi {
     required ImageJobRepository that,
   });
 
+  Stream<PlatformInt64> crateCoreImagesImageJobRepositoryListen({
+    required ImageJobRepository that,
+  });
+
   Future<List<ImageJob>> crateCoreImagesImageJobRepositoryLoad({
     required ImageJobRepository that,
     required Pagination pagination,
   });
 
   ImageJobRepository crateCoreImagesImageJobRepositoryNew({
+    required String appDirectory,
     required ArcConnection db,
+    required ArcSettingsRepository settingsRepository,
   });
 
   Future<void> crateCoreImagesImageJobRepositoryRemoveJob({
     required ImageJobRepository that,
     required PlatformInt64 id,
+  });
+
+  Future<void> crateCoreImagesImageJobRepositorySetErrorMsg({
+    required ImageJobRepository that,
+    required PlatformInt64 id,
+    required String errorMsg,
   });
 
   Future<void> crateCoreImagesImageJobRepositorySetImagePath({
@@ -131,6 +152,10 @@ abstract class RustLibApi extends BaseApi {
     required ImageJobRepository that,
     required PlatformInt64 id,
     required JobStatus status,
+  });
+
+  ArcSettingsRepository crateCoreSettingsSettingsRepositoryGetArc({
+    required SettingsRepository that,
   });
 
   Future<void> crateCoreSettingsSettingsRepositoryInit({
@@ -178,6 +203,24 @@ abstract class RustLibApi extends BaseApi {
   get rust_arc_decrement_strong_count_ArcConnectionPtr;
 
   RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_ArcSettingsRepository;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_ArcSettingsRepository;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_ArcSettingsRepositoryPtr;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_ImageGenerator;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_ImageGenerator;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_ImageGeneratorPtr;
+
+  RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_ImageJobRepository;
 
   RustArcDecrementStrongCountFnType
@@ -205,6 +248,74 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
+  Future<ImageGenerator> crateAiImageGeneratorNew({required String apiKey}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(apiKey, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 1,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateAiImageGeneratorNewConstMeta,
+        argValues: [apiKey],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateAiImageGeneratorNewConstMeta => const TaskConstMeta(
+    debugName: "ImageGenerator_new",
+    argNames: ["apiKey"],
+  );
+
+  @override
+  Future<Uint8List> crateAiImageGeneratorRun({
+    required ImageGenerator that,
+    required String prompt,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+            that,
+            serializer,
+          );
+          sse_encode_String(prompt, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 2,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+        constMeta: kCrateAiImageGeneratorRunConstMeta,
+        argValues: [that, prompt],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateAiImageGeneratorRunConstMeta => const TaskConstMeta(
+    debugName: "ImageGenerator_run",
+    argNames: ["that", "prompt"],
+  );
+
+  @override
   Future<void> crateCoreImagesImageJobRepositoryCleanup({
     required ImageJobRepository that,
   }) {
@@ -219,7 +330,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 1,
+            funcId: 3,
             port: port_,
           );
         },
@@ -257,7 +368,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 2,
+            funcId: 4,
             port: port_,
           );
         },
@@ -293,7 +404,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 3,
+            funcId: 5,
             port: port_,
           );
         },
@@ -331,7 +442,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 4,
+            funcId: 6,
             port: port_,
           );
         },
@@ -371,7 +482,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 5,
+            funcId: 7,
             port: port_,
           );
         },
@@ -407,7 +518,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 6,
+            funcId: 8,
             port: port_,
           );
         },
@@ -429,6 +540,47 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Stream<PlatformInt64> crateCoreImagesImageJobRepositoryListen({
+    required ImageJobRepository that,
+  }) {
+    final stream = RustStreamSink<PlatformInt64>();
+    unawaited(
+      handler.executeNormal(
+        NormalTask(
+          callFfi: (port_) {
+            final serializer = SseSerializer(generalizedFrbRustBinding);
+            sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
+              that,
+              serializer,
+            );
+            sse_encode_StreamSink_i_64_Sse(stream, serializer);
+            pdeCallFfi(
+              generalizedFrbRustBinding,
+              serializer,
+              funcId: 9,
+              port: port_,
+            );
+          },
+          codec: SseCodec(
+            decodeSuccessData: sse_decode_unit,
+            decodeErrorData: sse_decode_AnyhowException,
+          ),
+          constMeta: kCrateCoreImagesImageJobRepositoryListenConstMeta,
+          argValues: [that, stream],
+          apiImpl: this,
+        ),
+      ),
+    );
+    return stream.stream;
+  }
+
+  TaskConstMeta get kCrateCoreImagesImageJobRepositoryListenConstMeta =>
+      const TaskConstMeta(
+        debugName: "ImageJobRepository_listen",
+        argNames: ["that", "stream"],
+      );
+
+  @override
   Future<List<ImageJob>> crateCoreImagesImageJobRepositoryLoad({
     required ImageJobRepository that,
     required Pagination pagination,
@@ -445,7 +597,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 7,
+            funcId: 10,
             port: port_,
           );
         },
@@ -468,17 +620,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   ImageJobRepository crateCoreImagesImageJobRepositoryNew({
+    required String appDirectory,
     required ArcConnection db,
+    required ArcSettingsRepository settingsRepository,
   }) {
     return handler.executeSync(
       SyncTask(
         callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(appDirectory, serializer);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcConnection(
             db,
             serializer,
           );
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8)!;
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+            settingsRepository,
+            serializer,
+          );
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11)!;
         },
         codec: SseCodec(
           decodeSuccessData:
@@ -486,7 +645,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeErrorData: null,
         ),
         constMeta: kCrateCoreImagesImageJobRepositoryNewConstMeta,
-        argValues: [db],
+        argValues: [appDirectory, db, settingsRepository],
         apiImpl: this,
       ),
     );
@@ -495,7 +654,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateCoreImagesImageJobRepositoryNewConstMeta =>
       const TaskConstMeta(
         debugName: "ImageJobRepository_new",
-        argNames: ["db"],
+        argNames: ["appDirectory", "db", "settingsRepository"],
       );
 
   @override
@@ -515,7 +674,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 9,
+            funcId: 12,
             port: port_,
           );
         },
@@ -537,6 +696,46 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<void> crateCoreImagesImageJobRepositorySetErrorMsg({
+    required ImageJobRepository that,
+    required PlatformInt64 id,
+    required String errorMsg,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
+            that,
+            serializer,
+          );
+          sse_encode_i_64(id, serializer);
+          sse_encode_String(errorMsg, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 13,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+        constMeta: kCrateCoreImagesImageJobRepositorySetErrorMsgConstMeta,
+        argValues: [that, id, errorMsg],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateCoreImagesImageJobRepositorySetErrorMsgConstMeta =>
+      const TaskConstMeta(
+        debugName: "ImageJobRepository_set_error_msg",
+        argNames: ["that", "id", "errorMsg"],
+      );
+
+  @override
   Future<void> crateCoreImagesImageJobRepositorySetImagePath({
     required ImageJobRepository that,
     required PlatformInt64 id,
@@ -555,7 +754,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 10,
+            funcId: 14,
             port: port_,
           );
         },
@@ -595,7 +794,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 11,
+            funcId: 15,
             port: port_,
           );
         },
@@ -617,6 +816,38 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  ArcSettingsRepository crateCoreSettingsSettingsRepositoryGetArc({
+    required SettingsRepository that,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSettingsRepository(
+            that,
+            serializer,
+          );
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 16)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateCoreSettingsSettingsRepositoryGetArcConstMeta,
+        argValues: [that],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateCoreSettingsSettingsRepositoryGetArcConstMeta =>
+      const TaskConstMeta(
+        debugName: "SettingsRepository_get_arc",
+        argNames: ["that"],
+      );
+
+  @override
   Future<void> crateCoreSettingsSettingsRepositoryInit({
     required SettingsRepository that,
   }) {
@@ -631,7 +862,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 12,
+            funcId: 17,
             port: port_,
           );
         },
@@ -667,7 +898,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 13,
+            funcId: 18,
             port: port_,
           );
         },
@@ -700,7 +931,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             db,
             serializer,
           );
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 14)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 19)!;
         },
         codec: SseCodec(
           decodeSuccessData:
@@ -737,7 +968,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 15,
+            funcId: 20,
             port: port_,
           );
         },
@@ -770,7 +1001,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 16,
+            funcId: 21,
             port: port_,
           );
         },
@@ -801,7 +1032,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 17,
+            funcId: 22,
             port: port_,
           );
         },
@@ -825,7 +1056,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SyncTask(
         callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 18)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 23)!;
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_pagination,
@@ -852,7 +1083,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_box_autoadd_pagination(that, serializer);
           sse_encode_i_64(limit, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 19)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 24)!;
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_pagination,
@@ -882,7 +1113,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_box_autoadd_pagination(that, serializer);
           sse_encode_i_64(offset, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 20)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 25)!;
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_pagination,
@@ -908,6 +1139,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustArcDecrementStrongCountFnType
   get rust_arc_decrement_strong_count_ArcConnection =>
       wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcConnection;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_ArcSettingsRepository =>
+      wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_ArcSettingsRepository =>
+      wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_ImageGenerator =>
+      wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_ImageGenerator =>
+      wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator;
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_ImageJobRepository =>
@@ -941,6 +1188,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ArcSettingsRepository
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcSettingsRepositoryImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ImageGenerator
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ImageGeneratorImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   ImageJobRepository
   dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     dynamic raw,
@@ -959,12 +1224,39 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ImageJobRepository
+  dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ImageJobRepositoryImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   ArcConnection
   dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcConnection(
     dynamic raw,
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return ArcConnectionImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcSettingsRepository
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcSettingsRepositoryImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ImageGenerator
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ImageGeneratorImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -995,6 +1287,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ArcSettingsRepository
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcSettingsRepositoryImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ImageGenerator
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ImageGeneratorImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   ImageJobRepository
   dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     dynamic raw,
@@ -1010,6 +1320,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return SettingsRepositoryImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RustStreamSink<PlatformInt64> dco_decode_StreamSink_i_64_Sse(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
   }
 
   @protected
@@ -1061,13 +1377,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ImageJob dco_decode_image_job(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return ImageJob(
       id: dco_decode_i_64(arr[0]),
       prompt: dco_decode_String(arr[1]),
       status: dco_decode_job_status(arr[2]),
       imagePath: dco_decode_opt_String(arr[3]),
+      errMsg: dco_decode_opt_String(arr[4]),
     );
   }
 
@@ -1166,6 +1483,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ArcSettingsRepository
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcSettingsRepositoryImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  ImageGenerator
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ImageGeneratorImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   ImageJobRepository
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     SseDeserializer deserializer,
@@ -1190,12 +1531,48 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ImageJobRepository
+  sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ImageJobRepositoryImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   ArcConnection
   sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcConnection(
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return ArcConnectionImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  ArcSettingsRepository
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcSettingsRepositoryImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  ImageGenerator
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ImageGeneratorImpl.frbInternalSseDecode(
       sse_decode_usize(deserializer),
       sse_decode_i_32(deserializer),
     );
@@ -1238,6 +1615,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ArcSettingsRepository
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcSettingsRepositoryImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  ImageGenerator
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ImageGeneratorImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   ImageJobRepository
   sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     SseDeserializer deserializer,
@@ -1259,6 +1660,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       sse_decode_usize(deserializer),
       sse_decode_i_32(deserializer),
     );
+  }
+
+  @protected
+  RustStreamSink<PlatformInt64> sse_decode_StreamSink_i_64_Sse(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
   }
 
   @protected
@@ -1311,11 +1720,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_prompt = sse_decode_String(deserializer);
     var var_status = sse_decode_job_status(deserializer);
     var var_imagePath = sse_decode_opt_String(deserializer);
+    var var_errMsg = sse_decode_opt_String(deserializer);
     return ImageJob(
       id: var_id,
       prompt: var_prompt,
       status: var_status,
       imagePath: var_imagePath,
+      errMsg: var_errMsg,
     );
   }
 
@@ -1440,6 +1851,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    ArcSettingsRepository self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as ArcSettingsRepositoryImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    ImageGenerator self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as ImageGeneratorImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     ImageJobRepository self,
     SseSerializer serializer,
@@ -1466,6 +1903,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
+    ImageJobRepository self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as ImageJobRepositoryImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcConnection(
     ArcConnection self,
     SseSerializer serializer,
@@ -1473,6 +1923,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
       (self as ArcConnectionImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    ArcSettingsRepository self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as ArcSettingsRepositoryImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    ImageGenerator self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as ImageGeneratorImpl).frbInternalSseEncode(move: false),
       serializer,
     );
   }
@@ -1518,6 +1994,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    ArcSettingsRepository self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as ArcSettingsRepositoryImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    ImageGenerator self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as ImageGeneratorImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     ImageJobRepository self,
     SseSerializer serializer,
@@ -1538,6 +2040,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
       (self as SettingsRepositoryImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
+  }
+
+  @protected
+  void sse_encode_StreamSink_i_64_Sse(
+    RustStreamSink<PlatformInt64> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+      self.setupAndSerialize(
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_i_64,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+      ),
       serializer,
     );
   }
@@ -1599,6 +2118,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.prompt, serializer);
     sse_encode_job_status(self.status, serializer);
     sse_encode_opt_String(self.imagePath, serializer);
+    sse_encode_opt_String(self.errMsg, serializer);
   }
 
   @protected
@@ -1723,6 +2243,61 @@ class ArcConnectionImpl extends RustOpaque implements ArcConnection {
 }
 
 @sealed
+class ArcSettingsRepositoryImpl extends RustOpaque
+    implements ArcSettingsRepository {
+  // Not to be used by end users
+  ArcSettingsRepositoryImpl.frbInternalDcoDecode(List<dynamic> wire)
+    : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcSettingsRepositoryImpl.frbInternalSseDecode(
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib
+            .instance
+            .api
+            .rust_arc_increment_strong_count_ArcSettingsRepository,
+    rustArcDecrementStrongCount:
+        RustLib
+            .instance
+            .api
+            .rust_arc_decrement_strong_count_ArcSettingsRepository,
+    rustArcDecrementStrongCountPtr:
+        RustLib
+            .instance
+            .api
+            .rust_arc_decrement_strong_count_ArcSettingsRepositoryPtr,
+  );
+}
+
+@sealed
+class ImageGeneratorImpl extends RustOpaque implements ImageGenerator {
+  // Not to be used by end users
+  ImageGeneratorImpl.frbInternalDcoDecode(List<dynamic> wire)
+    : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ImageGeneratorImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_ImageGenerator,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ImageGenerator,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ImageGeneratorPtr,
+  );
+
+  Future<Uint8List> run({required String prompt}) =>
+      RustLib.instance.api.crateAiImageGeneratorRun(that: this, prompt: prompt);
+}
+
+@sealed
 class ImageJobRepositoryImpl extends RustOpaque implements ImageJobRepository {
   // Not to be used by end users
   ImageJobRepositoryImpl.frbInternalDcoDecode(List<dynamic> wire)
@@ -1774,6 +2349,9 @@ class ImageJobRepositoryImpl extends RustOpaque implements ImageJobRepository {
   Future<void> init() =>
       RustLib.instance.api.crateCoreImagesImageJobRepositoryInit(that: this);
 
+  Stream<PlatformInt64> listen() =>
+      RustLib.instance.api.crateCoreImagesImageJobRepositoryListen(that: this);
+
   Future<List<ImageJob>> load({required Pagination pagination}) =>
       RustLib.instance.api.crateCoreImagesImageJobRepositoryLoad(
         that: this,
@@ -1782,6 +2360,15 @@ class ImageJobRepositoryImpl extends RustOpaque implements ImageJobRepository {
 
   Future<void> removeJob({required PlatformInt64 id}) => RustLib.instance.api
       .crateCoreImagesImageJobRepositoryRemoveJob(that: this, id: id);
+
+  Future<void> setErrorMsg({
+    required PlatformInt64 id,
+    required String errorMsg,
+  }) => RustLib.instance.api.crateCoreImagesImageJobRepositorySetErrorMsg(
+    that: this,
+    id: id,
+    errorMsg: errorMsg,
+  );
 
   Future<void> setImagePath({
     required PlatformInt64 id,
@@ -1825,6 +2412,9 @@ class SettingsRepositoryImpl extends RustOpaque implements SettingsRepository {
             .api
             .rust_arc_decrement_strong_count_SettingsRepositoryPtr,
   );
+
+  ArcSettingsRepository getArc() => RustLib.instance.api
+      .crateCoreSettingsSettingsRepositoryGetArc(that: this);
 
   Future<void> init() =>
       RustLib.instance.api.crateCoreSettingsSettingsRepositoryInit(that: this);

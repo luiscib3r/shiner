@@ -14,7 +14,10 @@ class SettingsView extends HookConsumerWidget {
       appBar: AppBar(title: const Text('Settings')),
       body: SafeArea(
         child: switch (settings) {
-          AsyncError() => const Center(child: Text('Error loading settings')),
+          AsyncError(:final error) => Padding(
+            padding: const EdgeInsets.all(24),
+            child: Center(child: Text('Error loading settings $error')),
+          ),
           AsyncData(:final value) => SettingsForm(settings: value),
           _ => const Center(child: CircularProgressIndicator()),
         },

@@ -9,15 +9,21 @@ Future<void> main() async {
   await RustLib.init();
 
   // Initialize the database connection
-  final db = await databaseConnection();
+  final appDirectory = await getAppDirectory();
+  final db = await databaseConnection(appDirectory);
 
   // Initialize the repositories
   final settingsRepository = await initSettingsRepository(db);
-  final imagesRepository = await initImagesRepository(db);
+  final imagesRepository = await initImagesRepository(
+    appDirectory,
+    db,
+    settingsRepository.getArc(),
+  );
 
   runApp(
     ProviderScope(
       overrides: [
+        appDirectoryPod.overrideWithValue(appDirectory),
         settingsRepositoryPod.overrideWithValue(settingsRepository),
         imagesRepositoryPod.overrideWithValue(imagesRepository),
       ],

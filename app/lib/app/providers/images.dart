@@ -1,14 +1,24 @@
 import 'package:app/app/internal/core/images.dart';
 import 'package:app/app/internal/core/pagination.dart';
-import 'package:app/app/internal/data/database.dart';
+import 'package:app/app/internal/lib.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 //============================================================================
 // Images Repository
 //============================================================================
-Future<ImageJobRepository> initImagesRepository(ArcConnection db) async {
-  final repository = ImageJobRepository(db: db);
+Future<ImageJobRepository> initImagesRepository(
+  String appDirectory,
+  ArcConnection db,
+  ArcSettingsRepository settingsRepository,
+) async {
+  final repository = ImageJobRepository(
+    appDirectory: appDirectory,
+    db: db,
+    settingsRepository: settingsRepository,
+  );
+
   await repository.init();
+
   return repository;
 }
 
@@ -48,13 +58,31 @@ final imagesPaginationPod =
     );
 
 //============================================================================
+// Images stream
+// ============================================================================
+final _imagesStreamPod = StreamProvider((ref) {
+  final repository = ref.watch(imagesRepositoryPod);
+  return repository.listen();
+});
+
+//============================================================================
 // Load images
 //============================================================================
 final imagesPod = FutureProvider.autoDispose((ref) async {
   final repository = ref.watch(imagesRepositoryPod);
   final pagination = ref.watch(imagesPaginationPod);
+  final images = await repository.load(pagination: pagination);
 
-  return repository.load(pagination: pagination);
+  ref.listen(_imagesStreamPod, (prev, state) {
+    final value = state.value;
+    if (value != null) {
+      if (images.map((e) => e.id).contains(value)) {
+        ref.invalidateSelf();
+      }
+    }
+  });
+
+  return images;
 });
 
 //============================================================================

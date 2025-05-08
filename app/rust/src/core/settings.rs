@@ -10,6 +10,7 @@ pub struct Settings {
     pub openai_api_key: String,
 }
 
+#[derive(Clone)]
 pub struct SettingsRepository {
     db: Arc<Connection>,
 }
@@ -29,6 +30,11 @@ impl SettingsRepository {
         stmt.execute(()).await?;
 
         Ok(())
+    }
+
+    #[frb(sync)]
+    pub fn get_arc(&self) -> Arc<SettingsRepository> {
+        Arc::new(self.clone())
     }
 }
 

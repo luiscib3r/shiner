@@ -9,12 +9,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app/app/internal/ai.dart';
 import 'package:app/app/internal/core/images.dart';
 import 'package:app/app/internal/core/job.dart';
 import 'package:app/app/internal/core/pagination.dart';
 import 'package:app/app/internal/core/settings.dart';
 import 'package:app/app/internal/data/database.dart';
 import 'package:app/app/internal/frb_generated.dart';
+import 'package:app/app/internal/lib.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_web.dart';
 
 abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
@@ -28,6 +30,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CrossPlatformFinalizerArg
   get rust_arc_decrement_strong_count_ArcConnectionPtr =>
       wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcConnection;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_ArcSettingsRepositoryPtr =>
+      wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_ImageGeneratorPtr =>
+      wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator;
 
   CrossPlatformFinalizerArg
   get rust_arc_decrement_strong_count_ImageJobRepositoryPtr =>
@@ -47,6 +57,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  ArcSettingsRepository
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    dynamic raw,
+  );
+
+  @protected
+  ImageGenerator
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    dynamic raw,
+  );
+
+  @protected
   ImageJobRepository
   dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     dynamic raw,
@@ -59,8 +81,26 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  ImageJobRepository
+  dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
+    dynamic raw,
+  );
+
+  @protected
   ArcConnection
   dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcConnection(
+    dynamic raw,
+  );
+
+  @protected
+  ArcSettingsRepository
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    dynamic raw,
+  );
+
+  @protected
+  ImageGenerator
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
     dynamic raw,
   );
 
@@ -83,6 +123,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  ArcSettingsRepository
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    dynamic raw,
+  );
+
+  @protected
+  ImageGenerator
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    dynamic raw,
+  );
+
+  @protected
   ImageJobRepository
   dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     dynamic raw,
@@ -93,6 +145,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSettingsRepository(
     dynamic raw,
   );
+
+  @protected
+  RustStreamSink<PlatformInt64> dco_decode_StreamSink_i_64_Sse(dynamic raw);
 
   @protected
   String dco_decode_String(dynamic raw);
@@ -161,6 +216,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  ArcSettingsRepository
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  ImageGenerator
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   ImageJobRepository
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     SseDeserializer deserializer,
@@ -173,8 +240,26 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  ImageJobRepository
+  sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   ArcConnection
   sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcConnection(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  ArcSettingsRepository
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  ImageGenerator
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
     SseDeserializer deserializer,
   );
 
@@ -197,6 +282,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  ArcSettingsRepository
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  ImageGenerator
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   ImageJobRepository
   sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     SseDeserializer deserializer,
@@ -205,6 +302,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   SettingsRepository
   sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSettingsRepository(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  RustStreamSink<PlatformInt64> sse_decode_StreamSink_i_64_Sse(
     SseDeserializer deserializer,
   );
 
@@ -283,6 +385,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    ArcSettingsRepository self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    ImageGenerator self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     ImageJobRepository self,
     SseSerializer serializer,
@@ -297,8 +413,29 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+  sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
+    ImageJobRepository self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
   sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcConnection(
     ArcConnection self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    ArcSettingsRepository self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    ImageGenerator self,
     SseSerializer serializer,
   );
 
@@ -325,6 +462,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    ArcSettingsRepository self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    ImageGenerator self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
   sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     ImageJobRepository self,
     SseSerializer serializer,
@@ -334,6 +485,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
   sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSettingsRepository(
     SettingsRepository self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_StreamSink_i_64_Sse(
+    RustStreamSink<PlatformInt64> self,
     SseSerializer serializer,
   );
 
@@ -435,6 +592,38 @@ class RustLibWire implements BaseWire {
       );
 
   void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    int ptr,
+  ) => wasmModule
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+        ptr,
+      );
+
+  void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    int ptr,
+  ) => wasmModule
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+        ptr,
+      );
+
+  void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    int ptr,
+  ) => wasmModule
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+        ptr,
+      );
+
+  void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    int ptr,
+  ) => wasmModule
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+        ptr,
+      );
+
+  void
   rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageJobRepository(
     int ptr,
   ) => wasmModule
@@ -480,6 +669,26 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
 
   external void
   rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcConnection(
+    int ptr,
+  );
+
+  external void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    int ptr,
+  );
+
+  external void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSettingsRepository(
+    int ptr,
+  );
+
+  external void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
+    int ptr,
+  );
+
+  external void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerImageGenerator(
     int ptr,
   );
 

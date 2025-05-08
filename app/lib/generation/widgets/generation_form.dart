@@ -26,7 +26,7 @@ class GenerationForm extends HookConsumerWidget {
 
       return null;
       // ignore: require_trailing_commas
-    }, []);
+    });
 
     return SafeArea(
       child: Form(
